@@ -80,10 +80,11 @@ datos <- datos %>% pivot_longer ( c("cavetrooper", "snowtrooper", "lavatrooper",
                                   names_to = "division",
                                   values_to = "evaluación")
 
+datos [["division"]] <- factor ( datos [["division"]])
 datos [["instancia"]] <- factor (1: nrow ( datos ))
 
 # Procedimiento ANOVA con ezANOVA ().
-cat ("\n\ nProcedimiento ANOVA usando ezANOVA \n\n")
+cat ("\n\ Procedimiento ANOVA usando ezANOVA \n\n")
 prueba <- ezANOVA (
   data = datos ,
   dv = evaluación ,
@@ -91,11 +92,18 @@ prueba <- ezANOVA (
   wid = instancia ,
   return_aov = TRUE )
 
-print ( prueba2 )
-cat("\n\nY factores de correcion para cuando no se cumple la\ncondicion de esfericidad:\n\n")
-print(prueba$'Sphericity Corrections')
+print ( prueba )
 
-#cat("\n\nY factores de correcion para cuando no se cumple la\ncondicion de esfericidad:\n\n")
-#print(prueba$'Sphericity Corrections')
+# Gráfico del tamaño del efecto .
+g <- ezPlot (
+     data = datos ,
+     dv = evaluación ,
+     wid = instancia ,
+     between = division ,
+     y_lab = " Evaluación de las tropas",
+     x = division
+     )
+
+print (g)
 
 
