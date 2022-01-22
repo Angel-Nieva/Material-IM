@@ -1,9 +1,9 @@
 #
-library(readxl)
 library(dplyr)
 library(ggpubr)
 library(ggplot2)
 library(simpleboot)
+library(ez)
 
 dir <- "C:/Users/Dell PC/Desktop/IME/Material-IME/PEP2/Respuesta"
 base <- "Datos PEP 2.csv"
@@ -70,7 +70,32 @@ n8 <- shapiro.test(recontrooper)
 # Al observar los p-value de la prueba de normalidad podemos concluir que las
 # tropas de las diferentes divisiones se comportan de manera normal.
 
+datos <- data.frame(cavetrooper, snowtrooper, lavatrooper, shoretrooper, spacetrooper, 
+                    recontrooper, sandtrooper, flametrooper)
+
+# Llevar data frame a formato largo .
+datos <- datos %>% pivot_longer ( c("cavetrooper", "snowtrooper", "lavatrooper",
+                                    "shoretrooper","spacetrooper", "recontrooper",
+                                    "sandtrooper", "flametrooper"),
+                                  names_to = "division",
+                                  values_to = "evaluación")
+
+datos [["instancia"]] <- factor (1: nrow ( datos ))
+
+# Procedimiento ANOVA con ezANOVA ().
+cat ("\n\ nProcedimiento ANOVA usando ezANOVA \n\n")
+prueba <- ezANOVA (
+  data = datos ,
+  dv = evaluación ,
+  between = division ,
+  wid = instancia ,
+  return_aov = TRUE )
+
+print ( prueba2 )
+cat("\n\nY factores de correcion para cuando no se cumple la\ncondicion de esfericidad:\n\n")
+print(prueba$'Sphericity Corrections')
+
+#cat("\n\nY factores de correcion para cuando no se cumple la\ncondicion de esfericidad:\n\n")
+#print(prueba$'Sphericity Corrections')
 
 
-
-#cavetrooper <- cavetrooper %<% filter()
