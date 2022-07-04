@@ -39,7 +39,7 @@ permutar <- function(muestra_1, muestra_2, FUN){
   
   # Hacer la permutación
   permutacion <- sample(c(muestra_1, muestra_2), size = n_1 + n_2,
-                        replace = FALSE)
+                        replace = FALSE) # TRUE si es independiente
   
   # Asignar elementos a los dos grupos
   permutacion_1 <- permutacion[1 : n_1]
